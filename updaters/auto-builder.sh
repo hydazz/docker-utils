@@ -71,7 +71,7 @@ for tag in ${TAGS}; do
           export IMAGE="vcxpz/ci-build:ci-build"
           export TEST_SEARCH="'${TEST_SEARCH}'"
           export RUN_ARGS="-e DEBUG=true"
-          curl -sSL https://raw.githubusercontent.com/hydazz/scripts/main/docker/docker-ci.sh | bash' >>${output}
+          curl -sSL https://raw.githubusercontent.com/hydazz/docker-utils/main/docker/docker-ci.sh | bash' >>${output}
 	fi
 	echo '
       - name: Build And Push The Docker Image
