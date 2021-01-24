@@ -25,13 +25,13 @@ jobs:
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"' >${output}
-	echo -e '          VERSION='${RELEASE_VERSION_COMMAND}'' >>${output}
-	echo '          OLD_VERSION=$(curl -sX GET "https://api.github.com/repos/hydazz/docker-'${DOCKERHUB_IMAGE}'/releases/latest" | jq -r .tag_name)' >>${output}
+	echo -e '          VERSION='"${RELEASE_VERSION_COMMAND}"'' >>${output}
+	echo '          OLD_VERSION=$(curl -sX GET "https://api.github.com/repos/hydazz/docker-'"${DOCKERHUB_IMAGE}"'/releases/latest" | jq -r .tag_name)' >>${output}
 	echo "          printf '{
                \"tag_name\": \"'\${VERSION}'\",
                \"target_commitish\": \"'\${main}'\",
                \"name\": \"'\${VERSION}'\",
-               \"body\": \"Upgrading Sonarr '\${OLD_VERSION}' to '\${VERSION}'\",
+               \"body\": \"Upgrading "${DOCKERHUB_IMAGE}" '\${OLD_VERSION}' to '\${VERSION}'\",
                \"draft\": false,
                \"prerelease\": false
           }' >releasebody.json

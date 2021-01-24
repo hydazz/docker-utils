@@ -22,13 +22,13 @@ on:
 echo '
 jobs:' >>${output}
 for tag in ${TAGS}; do
-	echo '  '${BASE_OS}'-'${tag/./-}':
+	echo '  '"${BASE_OS}"'-'"${tag/./-}"':
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
         with:
-          ref: '${BRANCH}'
+          ref: '"${BRANCH}"'
           fetch-depth: 0
 
       - name: Set up QEMU
@@ -54,22 +54,22 @@ for tag in ${TAGS}; do
         run: |
           docker build \' >>${output}
 		[[ ${VERSIONING} == "true" ]] &&
-			echo '            --build-arg VERSION='${APP_VERSION_LINK}' \' >>${output}
+			echo '            --build-arg VERSION='"${APP_VERSION_LINK}"' \' >>${output}
 		if [[ -n ${BUILD_ARGS} ]]; then
 			echo "${BUILD_ARGS}" | while read -r i; do
-				echo '            '${i}' \' >>${output}
+				echo '            '"${i}"' \' >>${output}
 			done
 		fi
 		[[ -n ${APP_BRANCH} ]] &&
-			echo '            --build-arg BRANCH="'${APP_BRANCH}'" \' >>${output}
+			echo '            --build-arg BRANCH="'"${APP_BRANCH}"'" \' >>${output}
 		echo '            --tag vcxpz/ci-build:ci-build \
-            --build-arg TAG='${tag}' \
+            --build-arg TAG='"${tag}"' \
             --file Dockerfile .
 
       - name: Test The Docker Image
         run: |
           export IMAGE="vcxpz/ci-build:ci-build"
-          export TEST_SEARCH="'${TEST_SEARCH}'"
+          export TEST_SEARCH="'"${TEST_SEARCH}"'"
           export RUN_ARGS="-e DEBUG=true"
           curl -sSL https://raw.githubusercontent.com/hydazz/docker-utils/main/docker/docker-ci.sh | bash' >>${output}
 	fi
@@ -77,39 +77,39 @@ for tag in ${TAGS}; do
       - name: Build And Push The Docker Image
         run: |
           docker buildx build \
-            --platform='${PLATFORMS}' \
+            --platform='"${PLATFORMS}"' \
             --output "type=image,push=true" \
-            --build-arg TAG='${tag}' \
+            --build-arg TAG='"${tag}"' \
             --build-arg BUILD_DATE="$(date +%Y-%m-%d)" \' >>${output}
 	[[ ${VERSIONING} == "true" ]] &&
-		echo '            --build-arg VERSION='${APP_VERSION_LINK}' \' >>${output}
+		echo '            --build-arg VERSION='"${APP_VERSION_LINK}"' \' >>${output}
 	if [[ -n ${BUILD_ARGS} ]]; then
 		echo "${BUILD_ARGS}" | while read -r i; do
-			echo '            '${i}' \' >>${output}
+			echo '            '"${i}"' \' >>${output}
 		done
 	fi
 	[[ -n ${APP_BRANCH} ]] &&
-		echo '            --build-arg BRANCH="'${APP_BRANCH}'" \' >>${output}
+		echo '            --build-arg BRANCH="'"${APP_BRANCH}"'" \' >>${output}
 
-	if [ ${LATEST} == ${tag} ]; then
-		echo '            --tag vcxpz/'${DOCKERHUB_IMAGE}':latest \' >>${output}
+	if [ "${LATEST}" == "${tag}" ]; then
+		echo '            --tag vcxpz/'"${DOCKERHUB_IMAGE}"':latest \' >>${output}
 		[[ ${VERSIONING} == "true" ]] &&
-			echo '            --tag vcxpz/'${DOCKERHUB_IMAGE}':'${APP_VERSION_LINK}' \' >>${output}
+			echo '            --tag vcxpz/'"${DOCKERHUB_IMAGE}"':'"${APP_VERSION_LINK}"' \' >>${output}
 	else
 		[[ ${VERSIONING} == "true" ]] &&
-			echo '            --tag vcxpz/'${DOCKERHUB_IMAGE}':'${tag}'-'${APP_VERSION_LINK}' \' >>${output}
+			echo '            --tag vcxpz/'"${DOCKERHUB_IMAGE}"':'"${tag}"'-'"${APP_VERSION_LINK}"' \' >>${output}
 	fi
-	echo '            --tag vcxpz/'${DOCKERHUB_IMAGE}':'${tag}' \
+	echo '            --tag vcxpz/'"${DOCKERHUB_IMAGE}"':'"${tag}"' \
             --file Dockerfile .' >>${output}
 
-	if [[ ${LATEST} == ${tag} ]]; then
+	if [[ ${LATEST} == "${tag}" ]]; then
 		echo '
       - name: Get New Package Versions From Image
         run: |' >>${output}
 		if [[ -n ${TEST_SEARCH} ]]; then
 			echo '          docker run --rm --entrypoint /bin/sh -v ${PWD}:/tmp vcxpz/ci-build:ci-build -c '\''\' >>${output}
 		else
-			echo '          docker run --rm --entrypoint /bin/sh -v ${PWD}:/tmp vcxpz/'${DOCKERHUB_IMAGE}':latest -c '\''\' >>${output}
+			echo '          docker run --rm --entrypoint /bin/sh -v ${PWD}:/tmp vcxpz/'"${DOCKERHUB_IMAGE}"':latest -c '\''\' >>${output}
 		fi
 
 		[[ ${BASE_OS} == "alpine" ]] &&
@@ -121,7 +121,7 @@ for tag in ${TAGS}; do
 		echo '
       - name: Update README
         run: |
-          export APP_VERSION='${APP_VERSION_LINK}'
+          export APP_VERSION='"${APP_VERSION_LINK}"'
           chmod +x .github/update_readme.sh && .github/update_readme.sh
 
       - name: Commit And Push Changes To Github

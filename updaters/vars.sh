@@ -28,4 +28,4 @@ echo "
 # ~~~~~~~~~~~~~~~~~~~~~~~
 
 RELEASE_SCHEDULE='${RELEASE_SCHEDULE}'" >>${output}
-echo "RELEASE_VERSION_COMMAND='$(echo ${RELEASE_VERSION_COMMAND} | sed s/"'"/'apos'/g)'" | sed s/'apos'/'\\x27'/g >>${output}
+echo "RELEASE_VERSION_COMMAND='$(echo "${RELEASE_VERSION_COMMAND}" | sed s/"'"/'apos'/g)'" | sed s/'apos'/'\\x27'/g >>${output}
