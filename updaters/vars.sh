@@ -27,5 +27,6 @@ echo "
 # auto-release.yml
 # ~~~~~~~~~~~~~~~~~~~~~~~
 
-RELEASE_SCHEDULE='${RELEASE_SCHEDULE}'" >>${output}
+RELEASE_SCHEDULE='${RELEASE_SCHEDULE}'
+BEAUTY_NAME='${BEAUTY_NAME}'" >>${output}
 echo "RELEASE_VERSION_COMMAND='$(echo "${RELEASE_VERSION_COMMAND}" | sed s/"'"/'apos'/g)'" | sed s/'apos'/'\\x27'/g >>${output}
