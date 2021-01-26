@@ -1,5 +1,5 @@
 #!/bin/bash
-exit 1
+
 # watches docker logs for '${TEST_SEARCH}' which usally means container booted successfully
 # this script is not really useful as if a service fails to start it will not know
 

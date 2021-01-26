@@ -3,7 +3,6 @@
 . .github/vars.conf
 
 for i in ${IMAGES}; do
-	exit 1
 	echo "Triggering build for ${i}"
 	curl \
 		-H "Accept: application/vnd.github.everest-preview+json" \
