@@ -9,5 +9,5 @@ for i in ${IMAGES}; do
 		-H "Authorization: token ${TOKEN}" \
 		--request POST \
 		--data '{"event_type": "Auto Trigger"}' \
-		https://api.github.com/repos/hydazz/docker-${DOCKERHUB_IMAGE}/dispatches
+		https://api.github.com/repos/hydazz/docker-${i}/dispatches
 done
