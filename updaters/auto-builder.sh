@@ -128,16 +128,20 @@ for tag in ${TAGS}; do
         run: |
           git add -A
           git commit -m "Bot Updating Files" || echo "No Changes"
-          git push || echo "No Changes"' >>${output}
+          git push || echo "No Changes"
 
-		# update readme if pushing :latest image
-		echo '
       - name: Sync README With Docker Hub
         uses: peter-evans/dockerhub-description@v2
         with:
           username: vcxpz
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: '"vcxpz/${DOCKERHUB_IMAGE}"'' >>${output}
+          repository: '"vcxpz/${DOCKERHUB_IMAGE}"'
+
+      - name: Trigger Images
+        env:
+          TOKEN: ${{ secrets.TOKEN }}
+        run: |
+          curl -sSL https://raw.githubusercontent.com/hydazz/docker-utils/main/github/trigger_build.sh | bash' >>${output}
 	fi
 	echo "" >>${output}
 done

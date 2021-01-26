@@ -20,7 +20,8 @@ BASE_OS='${BASE_OS}'
 ON_RELEASE='${ON_RELEASE}'
 VERSIONING='${VERSIONING}'
 BUILD_ARGS='${BUILD_ARGS}'
-TEST_SEARCH='${TEST_SEARCH}'" >${output}
+TEST_SEARCH='${TEST_SEARCH}'
+IMAGES='${IMAGES}'" >${output}
 
 echo "
 # ~~~~~~~~~~~~~~~~~~~~~~~
