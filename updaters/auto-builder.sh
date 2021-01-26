@@ -13,8 +13,10 @@ name: Auto Builder CI
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "'"${BUILD_SCHEDULE}"'"' >${output}
+  repository_dispatch:' >${output}
+[[ -n ${BUILD_SCHEDULE} ]] &&
+	echo '  schedule:
+    - cron: "'"${BUILD_SCHEDULE}"'"' >>${output}
 [[ ${ON_RELEASE} == "true" ]] &&
 	echo '  release:
     types:
@@ -135,8 +137,9 @@ for tag in ${TAGS}; do
         with:
           username: vcxpz
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: '"vcxpz/${DOCKERHUB_IMAGE}"'
-
+          repository: '"vcxpz/${DOCKERHUB_IMAGE}"'' >>${output}
+[[ -n ${IMAGES} ]] &&
+echo '
       - name: Trigger Images
         env:
           TOKEN: ${{ secrets.TOKEN }}

@@ -10,7 +10,6 @@ name: Auto Release CI
 
 on:
   workflow_dispatch:
-  repository_dispatch:
   schedule:
     - cron: "'"${RELEASE_SCHEDULE}"'"
 
