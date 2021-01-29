@@ -120,20 +120,14 @@ for tag in ${TAGS}; do
 		[[ ${BASE_OS} == "ubuntu" ]] &&
 			echo '            apt list -qq --installed | sed "s#/.*now ##g" | cut -d" " -f1 | sort >/tmp/package_versions.txt'\''' >>${output}
 
-		[[ -f update_readme.sh ]] &&
-			echo '
-      - name: Update README
-        run: |
-          export APP_VERSION='"${APP_VERSION_LINK}"'
-          chmod +x .github/update_readme.sh && .github/update_readme.sh' >>${output}
 		echo '
       - name: Commit And Push Changes To Github
         run: |
           git add -A
-          git commit -m "Bot Updating Files" || echo "No Changes"
-          git push || echo "No Changes"
+          git commit -m "Bot Updating Files" || true
+          git push || true
 
-      - name: Sync README With Docker Hub
+      - name: Sync README.md With Docker Hub
         uses: peter-evans/dockerhub-description@v2
         with:
           username: vcxpz
