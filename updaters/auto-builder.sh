@@ -74,9 +74,7 @@ for tag in ${TAGS}; do
 
       - name: Test The Docker Image
         run: |
-          export IMAGE="vcxpz/ci-build:ci-build"
           export TEST_SEARCH="'"${TEST_SEARCH}"'"
-          export RUN_ARGS="-e DEBUG=true"
           curl -sSL https://raw.githubusercontent.com/hydazz/docker-utils/main/docker/docker-ci.sh | bash' >>${output}
 	fi
 	echo '
