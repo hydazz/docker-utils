@@ -68,9 +68,10 @@ for tag in ${TAGS}; do
 		fi
 		[[ -n ${APP_BRANCH} ]] &&
 			echo '            --build-arg BRANCH="'"${APP_BRANCH}"'" \' >>${output}
-		echo '            --tag vcxpz/ci-build:ci-build \
-            --build-arg TAG='"${tag}"' \
-            --file Dockerfile .
+		echo '            --tag vcxpz/ci-build:ci-build \' >>${output}
+		[[ ! ${tag} == "latest" ]] &&
+			echo '            --build-arg TAG='"${tag}"' \' >>${output}
+		echo '            --file Dockerfile .
 
       - name: Test The Docker Image
         run: |
@@ -82,9 +83,10 @@ for tag in ${TAGS}; do
         run: |
           docker buildx build \
             --platform='"${PLATFORMS}"' \
-            --output "type=image,push=true" \
-            --build-arg TAG='"${tag}"' \
-            --build-arg BUILD_DATE="$(date +%Y-%m-%d)" \' >>${output}
+            --output "type=image,push=true" \' >>${output}
+	[[ ! ${tag} == "latest" ]] &&
+		echo '            --build-arg TAG='"${tag}"' \' >>${output}
+	echo '            --build-arg BUILD_DATE="$(date +%Y-%m-%d)" \' >>${output}
 	[[ ${VERSIONING} == "true" ]] &&
 		echo '            --build-arg VERSION='"${APP_VERSION_LINK}"' \' >>${output}
 	if [[ -n ${BUILD_ARGS} ]]; then
