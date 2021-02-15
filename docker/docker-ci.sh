@@ -4,17 +4,16 @@
 
 TIMEOUT=$((SECONDS + 120)) # time in seconds to wait for '${TEST_SEARCH}' in logs (timeout)
 
-docker run -d --name=logger -e DEBUG=true vcxpz/ci-build:ci-build
+docker run -d --name="ci-test" -e DEBUG=true vcxpz/ci-build:ci-build
 while [[ "$SECONDS" -lt "$TIMEOUT" ]]; do
-	if docker logs logger 2>&1 | grep -q "${TEST_SEARCH}"; then
+	if docker logs "ci-test" 2>&1 | grep -q "${TEST_SEARCH}"; then
 		FAILED=false
 		break
 	fi
 	sleep 1
 done
-sleep 5
-docker stop logger >/dev/null
-docker rm logger >/dev/null
+docker stop "ci-test" >/dev/null
+docker rm "ci-test" >/dev/null
 
 if [[ "$FAILED" == "false" ]]; then
 	echo "✅ Test Succeeded"
