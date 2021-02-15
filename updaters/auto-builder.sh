@@ -58,7 +58,10 @@ for tag in ${TAGS}; do
 		echo '
       - name: Build The Docker Image For Testing
         run: |
-          docker build \' >>${output}
+          docker buildx build \
+            --platform=amd64 \
+            --output "type=docker" \
+            --build-arg BUILD_DATE="$(date +%Y-%m-%d)" \' >>${output}
 		[[ ${VERSIONING} == "true" ]] &&
 			echo '            --build-arg VERSION='"${APP_VERSION_LINK}"' \' >>${output}
 		if [[ -n ${BUILD_ARGS} ]]; then
