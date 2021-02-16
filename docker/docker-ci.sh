@@ -21,7 +21,7 @@ if [[ "$FAILED" == "false" ]]; then
 	exit 0
 else
 	echo "❌ Test Failed"
-	docker logs logger
+	docker logs ci-test
 	docker rm ci-test >/dev/null
 	exit 1
 fi
