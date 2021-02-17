@@ -26,7 +26,7 @@ jobs:
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"' >${output}
 	echo -e '          VERSION='"${RELEASE_VERSION_COMMAND}"'' >>${output}
-	echo '          OLD_VERSION=$(curl -sX GET "https://api.github.com/repos/hydazz/docker-'"${DOCKERHUB_IMAGE}"'/releases/latest" | jq -r .tag_name)' >>${output}
+	echo -e '          OLD_VERSION=$(curl -sL "https://api.github.com/repos/hydazz/docker-'"${DOCKERHUB_IMAGE}"'/releases/latest" | jq -r \x27.tag_name\x27)' >>${output}
 	echo "          printf '{
                \"tag_name\": \"'\${VERSION}'\",
                \"target_commitish\": \"'\${main}'\",

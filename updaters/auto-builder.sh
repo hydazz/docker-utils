@@ -4,7 +4,7 @@
 output="workflows/auto-builder.yml"
 
 [[ -z ${APP_VERSION_LINK} ]] &&
-	APP_VERSION_LINK='$(curl -sX GET "https://api.github.com/repos/hydazz/docker-'${DOCKERHUB_IMAGE}'/releases/latest" | jq -r .tag_name)'
+	APP_VERSION_LINK='$(curl -sL "https://api.github.com/repos/hydazz/docker-'${DOCKERHUB_IMAGE}'/releases/latest" | jq -r \x27.tag_name\x27)'
 [[ -z ${TAGS} ]] &&
 	TAGS="latest"
 [[ -z ${LATEST} ]] &&
@@ -63,7 +63,7 @@ for tag in ${TAGS}; do
             --output "type=docker" \
             --build-arg BUILD_DATE="$(date +%Y-%m-%d)" \' >>${output}
 		[[ ${VERSIONING} == "true" ]] &&
-			echo '            --build-arg VERSION='"${APP_VERSION_LINK}"' \' >>${output}
+			echo -e '            --build-arg VERSION='"${APP_VERSION_LINK}"' \' >>${output}
 		if [[ -n ${BUILD_ARGS} ]]; then
 			echo "${BUILD_ARGS}" | while read -r i; do
 				echo '            '"${i}"' \' >>${output}
@@ -91,7 +91,7 @@ for tag in ${TAGS}; do
 		echo '            --build-arg TAG='"${tag}"' \' >>${output}
 	echo '            --build-arg BUILD_DATE="$(date +%Y-%m-%d)" \' >>${output}
 	[[ ${VERSIONING} == "true" ]] &&
-		echo '            --build-arg VERSION='"${APP_VERSION_LINK}"' \' >>${output}
+		echo -e '            --build-arg VERSION='"${APP_VERSION_LINK}"' \' >>${output}
 	if [[ -n ${BUILD_ARGS} ]]; then
 		echo "${BUILD_ARGS}" | while read -r i; do
 			echo '            '"${i}"' \' >>${output}
@@ -104,9 +104,9 @@ for tag in ${TAGS}; do
 		[[ ${tag} != "latest" ]] &&
 			echo '            --tag vcxpz/'"${DOCKERHUB_IMAGE}"':latest \' >>${output}
 		[[ ${VERSIONING} == "true" ]] &&
-			echo '            --tag vcxpz/'"${DOCKERHUB_IMAGE}"':'"${APP_VERSION_LINK}"' \' >>${output}
+			echo -e '            --tag vcxpz/'"${DOCKERHUB_IMAGE}"':'"${APP_VERSION_LINK}"' \' >>${output}
 	elif [ ${VERSIONING} == "true" ]; then
-		echo '            --tag vcxpz/'"${DOCKERHUB_IMAGE}"':'"${tag}"'-'"${APP_VERSION_LINK}"' \' >>${output}
+		echo -e '            --tag vcxpz/'"${DOCKERHUB_IMAGE}"':'"${tag}"'-'"${APP_VERSION_LINK}"' \' >>${output}
 	fi
 	echo '            --tag vcxpz/'"${DOCKERHUB_IMAGE}"':'"${tag}"' \
             --file Dockerfile .' >>${output}

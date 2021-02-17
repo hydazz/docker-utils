@@ -30,5 +30,6 @@ echo "
 # ~~~~~~~~~~~~~~~~~~~~~~~
 
 RELEASE_SCHEDULE='${RELEASE_SCHEDULE}'
-BEAUTY_NAME='${BEAUTY_NAME}'" >>${output}
+BEAUTY_NAME='${BEAUTY_NAME}'
+# apostrophe needs be replaced by '\x27'" >>${output}
 echo "RELEASE_VERSION_COMMAND='$(echo "${RELEASE_VERSION_COMMAND}" | sed s/"'"/'apos'/g)'" | sed s/'apos'/'\\x27'/g >>${output}
