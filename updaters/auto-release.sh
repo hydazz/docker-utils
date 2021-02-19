@@ -37,4 +37,7 @@ jobs:
           }' >releasebody.json
           curl -H \"Authorization: token \${TOKEN}\" -X POST https://api.github.com/repos/hydazz/docker-${DOCKERHUB_IMAGE}/releases -d @releasebody.json
 " >>${output}
+else
+	[[ -f ${output} ]] &&
+		rm ${output}
 fi

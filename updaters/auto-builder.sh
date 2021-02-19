@@ -54,9 +54,9 @@ for tag in ${TAGS}; do
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"' >>${output}
-	if [[ -n ${TEST_SEARCH} ]]; then
+	if [ "${LATEST}" == "${tag}" ]; then
 		echo '
-      - name: Build The Docker Image For Testing
+      - name: Build The Docker Image Locally
         run: |
           docker buildx build \
             --platform=amd64 \
@@ -74,8 +74,9 @@ for tag in ${TAGS}; do
 		echo '            --tag vcxpz/ci-build:ci-build \' >>${output}
 		[[ ! ${tag} == "latest" ]] &&
 			echo '            --build-arg TAG='"${tag}"' \' >>${output}
-		echo '            --file Dockerfile .
-
+		echo '            --file Dockerfile .' >>${output}
+		[[ -n ${TEST_SEARCH} ]] &&
+			echo '
       - name: Test The Docker Image
         run: |
           export TEST_SEARCH="'"${TEST_SEARCH}"'"
@@ -114,12 +115,8 @@ for tag in ${TAGS}; do
 	if [[ ${LATEST} == "${tag}" ]]; then
 		echo '
       - name: Get New Package Versions From Image
-        run: |' >>${output}
-		if [[ -n ${TEST_SEARCH} ]]; then
-			echo '          docker run --rm --entrypoint /bin/sh -v ${PWD}:/tmp vcxpz/ci-build:ci-build -c '\''\' >>${output}
-		else
-			echo '          docker run --rm --entrypoint /bin/sh -v ${PWD}:/tmp vcxpz/'"${DOCKERHUB_IMAGE}"':latest -c '\''\' >>${output}
-		fi
+        run: |
+          docker run --rm --entrypoint /bin/sh -v ${PWD}:/tmp vcxpz/ci-build:ci-build -c '\''\' >>${output}
 
 		[[ ${BASE_OS} == "alpine" ]] &&
 			echo '            apk info -v | sort >/tmp/package_versions.txt'\''' >>${output}
