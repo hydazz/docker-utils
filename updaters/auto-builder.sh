@@ -156,13 +156,23 @@ for tag in ${TAGS}; do
           username: vcxpz
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: '"vcxpz/${DOCKERHUB_IMAGE}"'' >>${output}
+
 		[[ -n ${IMAGES} ]] &&
-			echo '
+			echo "
       - name: Trigger Images
         env:
-          TOKEN: ${{ secrets.TOKEN }}
+          TOKEN: \${{ secrets.TOKEN }}
         run: |
-          curl -sSL https://raw.githubusercontent.com/hydazz/docker-utils/main/github/trigger_build.sh | bash' >>${output}
+          . .github/vars.conf
+          for i in \${IMAGES}; do
+          	echo \"Triggering build for \${i}\"
+          	curl \\
+          		-H \"Accept: application/vnd.github.everest-preview+json\" \\
+          		-H \"Authorization: token \${TOKEN}\" \\
+          		--request POST \\
+          		--data '{\"event_type\": \"Auto Trigger\"}' \\
+          		https://api.github.com/repos/hydazz/docker-\${i}/dispatches
+          done" >>${output}
 	fi
 	echo "" >>${output}
 done
