@@ -54,25 +54,7 @@ for tag in ${TAGS}; do
         run: |
           git config --global user.email "github-actions@github.com"
           git config --global user.name "github-actions"' >>${output}
-	if [[ -n ${RELEASE_VERSION_COMMAND} ]] && [ ${LATEST} == "${tag}" ]; then
-		echo '
-      - name: Check For Updates
-        env:
-          TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |' >>${output}
-		echo -e '          VERSION='"${RELEASE_VERSION_COMMAND}"'' >>${output}
-		echo -e '          OLD_VERSION=$(curl -sL "https://api.github.com/repos/hydazz/docker-'"${DOCKERHUB_IMAGE}"'/releases/latest" | jq -r \x27.tag_name\x27)' >>${output}
-		echo "          printf '{
-               \"tag_name\": \"'\${VERSION}'\",
-               \"target_commitish\": \"'\${main}'\",
-               \"name\": \"'\${VERSION}'\",
-               \"body\": \"Upgrading "${BEAUTY_NAME}" '\${OLD_VERSION}' to '\${VERSION}'\",
-               \"draft\": false,
-               \"prerelease\": false
-          }' >releasebody.json
-          curl -H \"Authorization: token \${TOKEN}\" -X POST https://api.github.com/repos/hydazz/docker-${DOCKERHUB_IMAGE}/releases -d @releasebody.json
-          rm releasebody.json" >>${output}
-	fi
+
 	if [ "${LATEST}" == "${tag}" ]; then
 		echo '
       - name: Build The Docker Image Locally
