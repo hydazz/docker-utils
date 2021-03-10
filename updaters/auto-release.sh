@@ -30,13 +30,9 @@ jobs:
 	echo "          printf '{
                \"tag_name\": \"'\${VERSION}'\",
                \"target_commitish\": \"'\${main}'\",
-               \"name\": \"'\${VERSION}'\"," >>${output}
-	if [ -n "${CHANGELOG_URL}" ]; then
-		echo "               \"body\": \"Upgrading "${BEAUTY_NAME}" '\${OLD_VERSION}' to '\${VERSION}' \n[Changelog](${CHANGELOG_URL})\"," >>${output}
-	else
-		echo "               \"body\": \"Upgrading "${BEAUTY_NAME}" '\${OLD_VERSION}' to '\${VERSION}'\"," >>${output}
-	fi
-	echo "               \"draft\": false,
+               \"name\": \"'\${VERSION}'\",
+               \"body\": \"Upgrading "${BEAUTY_NAME}" '\${OLD_VERSION}' to '\${VERSION}'\",
+               \"draft\": false,
                \"prerelease\": false
           }' >releasebody.json
           curl -H \"Authorization: token \${TOKEN}\" -X POST https://api.github.com/repos/hydazz/docker-${DOCKERHUB_IMAGE}/releases -d @releasebody.json
