@@ -17,6 +17,7 @@ docker stop ci-test >/dev/null
 
 if [[ "$FAILED" == "false" ]]; then
 	echo "✅ Test Succeeded"
+	docker logs ci-test
 	docker rm ci-test >/dev/null
 	exit 0
 else
